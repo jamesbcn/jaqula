@@ -1,5 +1,7 @@
 'use strict';
+
 var Scope = require('../src/scope');
+
 describe('Scope', function () {
     it('can be constructed and used as an object', function () {
         var scope = new Scope();
@@ -18,7 +20,7 @@ describe('Scope', function () {
 
             spyOn(console, 'log').and.callThrough();
 
-            scope.someValue = 'a';
+            //scope.someValue = 'a';
             scope.counter = 0;
             // create a new watcher which is added to watchers
             scope.$watch(
@@ -26,12 +28,16 @@ describe('Scope', function () {
                 function (newValue, oldValue, scope) { scope.counter++; }
             );
             expect(scope.counter).toBe(0);
-            scope.$digest(); // iternate over watchers calling their watch functions (passing itself as an argument) and listen functions if there is a change 
+
+            scope.$digest(); // iternate over watchers calling their watch functions (passing itself as an argument) and listen functions if there is a change
             expect(scope.counter).toBe(1);
+            
             scope.$digest();
             expect(scope.counter).toBe(1);
+
             scope.someValue = 'b';
             expect(scope.counter).toBe(1);
+            
             scope.$digest();
             expect(scope.counter).toBe(2);
         });

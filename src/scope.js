@@ -4,13 +4,15 @@ var _ = require('lodash');
 
 function Scope() {
     this.$$watchers = [];
-
 }
+
+function initWatchVal() { }
 
 Scope.prototype.$watch = function (watchFn, listenerFn) {
     var watcher = {
         watchFn: watchFn,
-        listenerFn: listenerFn
+        listenerFn: listenerFn,
+        last: initWatchVal
     };
     this.$$watchers.push(watcher);
 };
@@ -26,6 +28,9 @@ Scope.prototype.$digest = function () {
             console.log(newValue, oldValue);
             watcher.listenerFn(newValue, oldValue, self);
             watcher.last = newValue;
+        }
+        else {
+            console.log("no change!");
         }
     });
 };
