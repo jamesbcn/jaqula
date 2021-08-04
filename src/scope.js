@@ -4,6 +4,7 @@ var _ = require('lodash');
 
 function Scope() {
     this.$$watchers = [];
+
 }
 
 Scope.prototype.$watch = function (watchFn, listenerFn) {
@@ -14,10 +15,14 @@ Scope.prototype.$watch = function (watchFn, listenerFn) {
     this.$$watchers.push(watcher);
 };
 
-Scope.prototype.$digest = function() {
-    _.forEach(this.$$watchers, function(watcher) {
-    watcher.listenerFn();
+Scope.prototype.$digest = function () {
+
+    var self = this;
+    _.forEach(this.$$watchers, function (watcher) {
+        console.log(self)
+        watcher.watchFn(self);
+        watcher.listenerFn();
     });
-    };
-    
+};
+
 module.exports = Scope;

@@ -13,11 +13,14 @@ describe('Scope', function () {
             scope = new Scope();
         });
         it('calls the listener function of a watch on first $digest', function () {
-            var watchFn = function () { return 'wat'; };
-            var listenerFn = jasmine.createSpy();
+
+            spyOn(console, 'log').and.callThrough();
+            
+            var watchFn = jasmine.createSpy();
+            var listenerFn = function () { };
             scope.$watch(watchFn, listenerFn);
             scope.$digest();
-            expect(listenerFn).toHaveBeenCalled();
+            expect(watchFn).toHaveBeenCalledWith(scope);
         });
     });
 });
