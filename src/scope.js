@@ -19,7 +19,7 @@ Scope.prototype.$digest = function () {
 
     var self = this;
     _.forEach(this.$$watchers, function (watcher) {
-        console.log(self)
+        console.log(self); // scope created in test file
         watcher.watchFn(self);
         watcher.listenerFn();
     });

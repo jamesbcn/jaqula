@@ -11,6 +11,8 @@ describe('Scope', function () {
         var scope;
         beforeEach(function () {
             scope = new Scope();
+            scope.noise = "SEX";
+
         });
         it('calls the listener function of a watch on first $digest', function () {
 
@@ -18,8 +20,8 @@ describe('Scope', function () {
             
             var watchFn = jasmine.createSpy();
             var listenerFn = function () { };
-            scope.$watch(watchFn, listenerFn);
-            scope.$digest();
+            scope.$watch(watchFn, listenerFn); // create a new watcher which is added to watchers
+            scope.$digest(); // iternate over watchers calling their watch functions (passing itself as an argument) and listen functions 
             expect(watchFn).toHaveBeenCalledWith(scope);
         });
     });
