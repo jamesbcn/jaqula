@@ -17,12 +17,23 @@ describe('Scope', function () {
         it('calls the listener function of a watch on first $digest', function () {
 
             spyOn(console, 'log').and.callThrough();
-            
-            var watchFn = jasmine.createSpy();
-            var listenerFn = function () { };
-            scope.$watch(watchFn, listenerFn); // create a new watcher which is added to watchers
-            scope.$digest(); // iternate over watchers calling their watch functions (passing itself as an argument) and listen functions 
-            expect(watchFn).toHaveBeenCalledWith(scope);
+
+            scope.someValue = 'a';
+            scope.counter = 0;
+            // create a new watcher which is added to watchers
+            scope.$watch(
+                function (scope) { return scope.someValue; },
+                function (newValue, oldValue, scope) { scope.counter++; }
+            );
+            expect(scope.counter).toBe(0);
+            scope.$digest(); // iternate over watchers calling their watch functions (passing itself as an argument) and listen functions if there is a change 
+            expect(scope.counter).toBe(1);
+            scope.$digest();
+            expect(scope.counter).toBe(1);
+            scope.someValue = 'b';
+            expect(scope.counter).toBe(1);
+            scope.$digest();
+            expect(scope.counter).toBe(2);
         });
     });
 });

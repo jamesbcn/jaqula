@@ -18,10 +18,15 @@ Scope.prototype.$watch = function (watchFn, listenerFn) {
 Scope.prototype.$digest = function () {
 
     var self = this;
+    var newValue, oldValue;
     _.forEach(this.$$watchers, function (watcher) {
-        console.log(self); // scope created in test file
-        watcher.watchFn(self);
-        watcher.listenerFn();
+        newValue = watcher.watchFn(self); // returns someValue 'a'
+        oldValue = watcher.last; // undefined
+        if (newValue !== oldValue) {
+            console.log(newValue, oldValue);
+            watcher.listenerFn(newValue, oldValue, self);
+            watcher.last = newValue;
+        }
     });
 };
 
