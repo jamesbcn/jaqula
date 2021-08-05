@@ -22,15 +22,17 @@ Scope.prototype.$digest = function () {
     var self = this;
     var newValue, oldValue;
     _.forEach(this.$$watchers, function (watcher) {
-        newValue = watcher.watchFn(self); // returns someValue 'a'
+        newValue = watcher.watchFn(self);
         oldValue = watcher.last; // undefined
+        console.log(newValue, oldValue);
         if (newValue !== oldValue) {
-            console.log(newValue, oldValue);
-            watcher.listenerFn(newValue, oldValue, self);
+            console.log("values not the same!");
             watcher.last = newValue;
+            watcher.listenerFn(newValue, (oldValue === initWatchVal ? newValue : oldValue), self);
+            console.log("after", newValue, (oldValue === initWatchVal ? newValue : oldValue));
         }
         else {
-            console.log("no change!");
+            console.log("newValue === oldValue!");
         }
     });
 };

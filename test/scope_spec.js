@@ -16,30 +16,51 @@ describe('Scope', function () {
             scope.noise = "SEX";
 
         });
-        it('calls the listener function of a watch on first $digest', function () {
+        // it('calls the listener function of a watch on first $digest', function () {
 
-            spyOn(console, 'log').and.callThrough();
+        //     spyOn(console, 'log').and.callThrough();
 
-            //scope.someValue = 'a';
-            scope.counter = 0;
-            // create a new watcher which is added to watchers
+        //     //scope.someValue = 'a';
+        //     scope.counter = 0;
+        //     // create a new watcher which is added to watchers
+        //     scope.$watch(
+        //         function (scope) { return scope.someValue; },
+        //         function (newValue, oldValue, scope) { scope.counter++; }
+        //     );
+        //     expect(scope.counter).toBe(0);
+
+        //     scope.$digest(); // iternate over watchers calling their watch functions (passing itself as an argument) and listen functions if there is a change
+        //     expect(scope.counter).toBe(1);
+
+        //     scope.$digest();
+        //     expect(scope.counter).toBe(1);
+
+        //     scope.someValue = 'b';
+        //     expect(scope.counter).toBe(1);
+
+        //     scope.$digest();
+        //     expect(scope.counter).toBe(2);
+        // });
+
+        // it('calls listener when watch value is first undefined', function () {
+        //     scope.counter = 0;
+        //     scope.$watch(
+        //         function (scope) { return scope.someValue; },
+        //         function (newValue, oldValue, scope) { scope.counter++; }
+        //     );
+        //     scope.$digest();
+        //     expect(scope.counter).toBe(1);
+        // });
+
+        it('calls listener with new value as old value the first time', function () {
+            scope.someValue = 123;
+            var oldValueGiven;
             scope.$watch(
                 function (scope) { return scope.someValue; },
-                function (newValue, oldValue, scope) { scope.counter++; }
+                function (newValue, oldValue, scope) { oldValueGiven = oldValue; }
             );
-            expect(scope.counter).toBe(0);
-
-            scope.$digest(); // iternate over watchers calling their watch functions (passing itself as an argument) and listen functions if there is a change
-            expect(scope.counter).toBe(1);
-            
             scope.$digest();
-            expect(scope.counter).toBe(1);
-
-            scope.someValue = 'b';
-            expect(scope.counter).toBe(1);
-            
-            scope.$digest();
-            expect(scope.counter).toBe(2);
+            expect(oldValueGiven).toBe(123);
         });
     });
 });
