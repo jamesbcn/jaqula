@@ -42,6 +42,7 @@ Scope.prototype.$$digestOnce = function () {
             console.log("newValue === oldValue!");
         }
     });
+    console.log("DUUUURTY: ",dirty);
     return dirty;
 };
 
