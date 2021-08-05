@@ -11,18 +11,23 @@ function initWatchVal() { }
 Scope.prototype.$watch = function (watchFn, listenerFn) {
     var watcher = {
         watchFn: watchFn,
-        listenerFn: listenerFn || function() { },
+        listenerFn: listenerFn || function () { },
         last: initWatchVal
     };
     this.$$watchers.push(watcher);
 };
 
-Scope.prototype.$digest = function() {
+Scope.prototype.$digest = function () {
+
+    var ttl = 10;
     var dirty;
     do {
-    dirty = this.$$digestOnce();
+        dirty = this.$$digestOnce();
+        if (dirty && !(ttl--)) {
+            throw '10 digest iterations reached';
+        }
     } while (dirty);
-    };
+};
 
 Scope.prototype.$$digestOnce = function () {
 
@@ -42,7 +47,7 @@ Scope.prototype.$$digestOnce = function () {
             console.log("newValue === oldValue!");
         }
     });
-    console.log("DUUUURTY: ",dirty);
+    console.log("DUUUURTY DIGEST: ", dirty);
     return dirty;
 };
 

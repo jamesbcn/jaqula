@@ -93,41 +93,59 @@ describe('Scope', function () {
         //   });
       
 
-        it('triggers chained watchers in the same digest', function () {
-            scope.name = 'Jane';
+        // it('triggers chained watchers in the same digest', function () {
+        //     scope.name = 'Jane';
+        //     scope.$watch(
+        //         function (scope) { return scope.nameUpper; },
+        //         function (newValue, oldValue, scope) {
+        //             console.log("=======WATCHER 1 ENDS ==========================");
+        //             console.log("LISTENER 1: ", newValue, oldValue);
+        //             if (newValue) {
+        //                 scope.initial = newValue.substring(0, 1) + '.';
+        //                 console.log("scope.initial: ", scope.initial);
+        //             }
+        //             console.log("=======LISTENER 1 END ==========================");
+        //             console.log("=======WATCHER 2 STARTS? ==========================");
+        //         }
+        //     );
+        //     scope.$watch(
+        //         function (scope) { 
+        //             return scope.name; },
+        //         function (newValue, oldValue, scope) {
+        //             console.log("=======WATCHER 2 ENDS ==========================");
+        //             console.log("LISTENER 2: ", newValue, oldValue);
+        //             if (newValue) {
+        //                 scope.nameUpper = newValue.toUpperCase();
+        //                 console.log("scope.nameUpper: ", scope.nameUpper);
+        //             }
+        //             console.log("=======LISTENER 2 END ==========================");
+        //             console.log("=======WATCHER 1 STARTS? ==========================");
+        //         }
+        //     );
+        //     scope.$digest();
+        //     expect(scope.initial).toBe('J.');
+        //     // scope.name = 'Bob';
+        //     // scope.$digest();
+        //     // expect(scope.initial).toBe('B.');
+        // });
+
+        it('gives up on the watches after 10 iterations', function() {
+            scope.counterA = 0;
+            scope.counterB = 0;
             scope.$watch(
-                function (scope) { return scope.nameUpper; },
-                function (newValue, oldValue, scope) {
-                    console.log("=======WATCHER 1 ENDS ==========================");
-                    console.log("LISTENER 1: ", newValue, oldValue);
-                    if (newValue) {
-                        scope.initial = newValue.substring(0, 1) + '.';
-                        console.log("scope.initial: ", scope.initial)
-                    }
-                    console.log("=======LISTENER 1 END ==========================");
-                    console.log("=======WATCHER 2 STARTS? ==========================");
-                }
+            function(scope) { return scope.counterA; },
+            function(newValue, oldValue, scope) {
+            scope.counterB++;
+            }
             );
             scope.$watch(
-                function (scope) { 
-                    return scope.name; },
-                function (newValue, oldValue, scope) {
-                    console.log("=======WATCHER 2 ENDS ==========================");
-                    console.log("LISTENER 2: ", newValue, oldValue);
-                    if (newValue) {
-                        scope.nameUpper = newValue.toUpperCase();
-                        console.log("scope.nameUpper: ", scope.nameUpper)
-                    }
-                    console.log("=======LISTENER 2 END ==========================");
-                    console.log("=======WATCHER 1 STARTS? ==========================");
-                }
+            function(scope) { return scope.counterB; },
+            function(newValue, oldValue, scope) {
+            scope.counterA++;
+            }
             );
-            scope.$digest();
-            expect(scope.initial).toBe('J.');
-            // scope.name = 'Bob';
-            // scope.$digest();
-            // expect(scope.initial).toBe('B.');
-        });
+            expect((function() { scope.$digest(); })).toThrow();
+            });
 
     });
 });
